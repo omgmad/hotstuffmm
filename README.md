@@ -243,6 +243,20 @@ grep "ERROR\|WARNING\|HALTED" mm_mainnet.log
 
 ---
 
+## 👤 Author
+
+Built by [@0mgm4d](https://x.com/0mgm4d) — follow on X for updates and new releases.
+
+---
+
+## 🎁 Support & Referral
+
+If this bot has been helpful, consider signing up to Hotstuff using the referral link below — it helps support continued development:
+
+👉 **[Join Hotstuff](https://app.hotstuff.trade/join/hot)**
+
+---
+
 ## 📄 License
 
 MIT License — free to use and modify.
