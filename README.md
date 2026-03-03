@@ -2,7 +2,7 @@
 
 An automated market making bot for [Hotstuff.trade](https://app.hotstuff.trade/join/hot) perpetual futures exchange.
 
-> ⚠️ **WARNING**: This bot trades with real funds. Always start with small sizes and test thoroughly.
+> ⚠️ **WARNING**: This bot trades with real funds. Always start with small sizes and test thoroughly. for educational purposes only, NFA, DYOR
 
 ---
 
