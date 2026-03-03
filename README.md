@@ -1,6 +1,6 @@
 # 🔴 Hotstuff Market Maker Bot v3.0
 
-An automated market making bot for [Hotstuff.trade](https://hotstuff.trade) perpetual futures exchange.
+An automated market making bot for [Hotstuff.trade](https://app.hotstuff.trade/join/hot) perpetual futures exchange.
 
 > ⚠️ **WARNING**: This bot trades with real funds. Always start with small sizes and test thoroughly.
 
@@ -34,7 +34,7 @@ An automated market making bot for [Hotstuff.trade](https://hotstuff.trade) perp
 ## 💻 Requirements
 
 - Python 3.10+
-- A [Hotstuff.trade](https://hotstuff.trade) account with USDC balance
+- A [Hotstuff.trade](https://app.hotstuff.trade/join/hot) account with USDC balance
 - An agent wallet (with private key)
 
 ---
@@ -76,7 +76,7 @@ Save the printed **Address** and **PrivateKey** somewhere safe.
 
 ### 5. Register the agent on Hotstuff
 
-1. Go to [hotstuff.trade](https://hotstuff.trade) and connect your main wallet
+1. Go to [hotstuff.trade](https://app.hotstuff.trade/join/hot) and connect your main wallet
 2. Navigate to **Settings → Agents → Add Agent**
 3. Enter the **Address** from step 4 as the agent address
 4. Confirm with MetaMask
