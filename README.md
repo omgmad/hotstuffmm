@@ -244,7 +244,7 @@ grep "ERROR\|WARNING\|HALTED" mm_mainnet.log
 
 ---
 
-## 👤 Author
+## 👤 
 
 Built by [@0mgm4d](https://x.com/0mgm4d) — follow on X for updates and new releases.
 
