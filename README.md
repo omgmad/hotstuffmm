@@ -20,7 +20,7 @@ Built by [@0mgm4d](https://x.com/0mgm4d)
 ### 🎯 Spread Mechanism
 How the bot places BID + ASK orders around the mid price and earns a rebate on every fill.
 
-![Spread Mechanism](docs/gif1_spread.gif)
+![Spread Mechanism](gif1_spread.gif)
 
 </td>
 <td width="50%">
@@ -28,7 +28,7 @@ How the bot places BID + ASK orders around the mid price and earns a rebate on e
 ### 💰 Maker Rebate Tiers
 Volume drives tier upgrades — higher tier = higher rebate per fill = more daily earnings.
 
-![Rebate Tiers](docs/gif2_rebate.gif)
+![Rebate Tiers](gif2_rebate.gif)
 
 </td>
 </tr>
@@ -38,7 +38,7 @@ Volume drives tier upgrades — higher tier = higher rebate per fill = more dail
 ### ⚖️ Position Balance
 Keeping position near $0 keeps both sides active — maximizing volume and rebate income.
 
-![Position Balance](docs/gif3_position.gif)
+![Position Balance](gif3_position.gif)
 
 </td>
 <td width="50%">
@@ -46,7 +46,7 @@ Keeping position near $0 keeps both sides active — maximizing volume and rebat
 ### ⚠️ Leverage Risk
 Same $400 position — dramatically different liquidation risk depending on leverage used.
 
-![Leverage Risk](docs/gif4_leverage.gif)
+![Leverage Risk](gif4_leverage.gif)
 
 </td>
 </tr>
