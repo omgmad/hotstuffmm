@@ -1,42 +1,164 @@
-# 🔴 Hotstuff Market Maker Bot v3.0
+# 🔴 Hotstuff Market Maker Bot v4.0
 
-An automated market making bot for [Hotstuff.trade](https://app.hotstuff.trade/join/hot) perpetual futures exchange.
+An automated market making bot for [Hotstuff.trade](https://app.hotstuff.trade/join/hot) perpetual futures — BTC-PERP and ETH-PERP simultaneously.
 
-> ⚠️ **WARNING**: This bot trades with real funds. Always start with small sizes and test thoroughly. 
-for educational purposes only, NFA, DYOR
+> ⚠️ **WARNING**: This bot trades with real funds on mainnet. Always start with small sizes and test thoroughly.
+> For educational purposes only. NFA, DYOR.
+
+Built by [@0mgm4d](https://x.com/0mgm4d)
 
 ---
 
 ## 📋 Table of Contents
 
+- [How It Works](#how-it-works)
 - [Features](#features)
+- [Performance](#performance)
+- [Risk Warning](#risk-warning)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Running the Bot](#running-the-bot)
-- [Utilities](#utilities)
+- [Scaling Up](#scaling-up)
+- [Monitoring](#monitoring)
 - [Troubleshooting](#troubleshooting)
 - [Emergency Stop](#emergency-stop)
+- [Security](#security)
+
+---
+
+## ⚙️ How It Works
+
+Market making is a strategy where the bot continuously places both a **buy (bid)** and **sell (ask)** order around the current market price. The bot earns a **maker rebate** on every filled order.
+
+```
+Market Price: $70,000
+
+Bot places:
+  BID @ $69,965  ← 5bps below mid
+  ASK @ $70,035  ← 5bps above mid
+
+When BID fills → bot is long $100
+When ASK fills → bot is short $100 (position returns toward 0)
+Rebate earned on each fill: 0.0025% × $100 = $0.0025
+```
+
+### Cycle Flow (every 5 seconds)
+
+```
+1. Fetch current mid price from Hotstuff API
+2. Check current position via REST API
+3. Calculate bid/ask prices with spread + inventory skew
+4. Check open orders to prevent duplicates
+5. Place BID if position is not at max long limit
+6. Place ASK if position is not at max short limit
+7. If position exceeds limit → auto reduce via market order (instant)
+8. Wait 5 seconds → repeat
+```
+
+### Position Management
+
+The bot tracks positions in real-time using WebSocket fills + REST API polling:
+
+```
+max_position_usd       = $400  (per symbol)
+max_total_exposure_usd = $800  (BTC + ETH combined)
+
+Position > max  →  auto reduce (market order, fills instantly)
+Position = max  →  stop placing orders on that side
+Position < max  →  place BID + ASK normally
+```
+
+### Maker Rebate Tiers
+
+Hotstuff pays a rebate to limit order makers on every fill:
+
+| Tier | 14-day Volume | Maker Rebate |
+|------|--------------|--------------|
+| Standard | $0 – $1M | -0.002% |
+| VIP 1 | > $1M | -0.0025% |
+| VIP 2 | > $5M | -0.003% |
+| VIP 3 | > $20M | -0.0035% |
+| VIP 4 | > $100M | -0.005% |
+
+Negative fee = **you receive money** on every fill. The higher your volume, the higher your rebate rate.
 
 ---
 
 ## ✨ Features
 
-- **Market Making** — Automatically places bid/ask orders around the mid price
-- **Inventory Skew** — Adjusts quotes based on current position to stay balanced
-- **Risk Management** — Daily loss limit and max drawdown circuit breakers
-- **Auto Cancel/Replace** — Cancels and refreshes orders every cycle
-- **Native Price Feed** — Uses Hotstuff's own mid price endpoint (no external feeds needed)
-- **Auto Instrument Detection** — Fetches instrument IDs, tick sizes and lot sizes from the API
-- **Logging** — Writes to both terminal and `mm_mainnet.log`
+- **Dual market making** — BTC-PERP + ETH-PERP running simultaneously
+- **Maker rebate farming** — Earns rebates on every filled limit order
+- **Real-time position tracking** — WebSocket fills + REST API fallback
+- **Auto reduce** — Market order reduce when position exceeds limit (instant fill)
+- **Duplicate order prevention** — Checks open orders before placing new ones
+- **Inventory skew** — Adjusts quotes based on current position to stay balanced
+- **Adaptive spread** — Widens spread automatically during high volatility
+- **Circuit breaker** — Pauses bot on consecutive losses or daily loss limit hit
+- **Auto instrument detection** — Fetches instrument IDs, tick sizes, lot sizes from API
+- **Detailed logging** — Logs to both terminal and log file
+
+---
+
+## 💰 Performance
+
+### Expected Daily Volume & Rebate
+
+| Config | Fill Rate | Daily Volume | Rebate VIP1 (-0.0025%) |
+|--------|----------|-------------|------------------------|
+| $100 order, 2 symbols | 40% | ~$1.4M | ~$35/day |
+| $200 order, 2 symbols | 40% | ~$2.8M | ~$70/day |
+| $500 order, 2 symbols | 40% | ~$7M | ~$175/day |
+
+### Key Insight: Position Balance = Profit
+
+```
+Position near $0  →  BID + ASK both active  →  Maximum volume  →  Maximum rebate
+Position at max   →  Only one side active   →  Half volume     →  Half rebate
+Position locked   →  No orders             →  Zero volume     →  Zero rebate
+```
+
+This is why the auto-reduce feature is critical — it keeps position balanced near zero so both sides keep filling and generating rebate income.
+
+---
+
+## ⚠️ Risk Warning
+
+**Read this carefully before running the bot.**
+
+### Leverage Risk
+- Default Hotstuff leverage is **50x**
+- At 50x: a **2% price move** against your position wipes **100% of your margin**
+- **Strongly recommended: Set leverage to 11x–20x on Hotstuff UI before running**
+
+### Capital Risk
+- Bot uses real USDC on mainnet
+- Losses can exceed rebate income during volatile markets
+- A single liquidation can erase multiple days of rebate profit
+
+### Recommended minimum capital by leverage
+
+| Leverage | Min Capital | Notes |
+|----------|------------|-------|
+| 50x | $500+ | Very high risk |
+| 20x | $300+ | Moderate risk |
+| 11x | $200+ | Recommended for beginners |
+
+### General Rules
+- Always start with `order_size_usd: 100` and verify stability for 24+ hours
+- Never run with capital you cannot afford to lose
+- Monitor the bot regularly — do not leave unattended for days
+- Past performance does not guarantee future results
+- This is not financial advice (NFA, DYOR)
 
 ---
 
 ## 💻 Requirements
 
 - Python 3.10+
-- A [Hotstuff.trade](https://app.hotstuff.trade/join/hot) account with USDC balance
-- An agent wallet (with private key)
+- Ubuntu / Linux (recommended) or macOS
+- [Hotstuff.trade](https://app.hotstuff.trade/join/hot) account with USDC deposited
+- API wallet created on Hotstuff
 
 ---
 
@@ -45,14 +167,14 @@ for educational purposes only, NFA, DYOR
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/omgmad/hotstuffmm/hotstuff-mm-bot.git
-cd hotstuff-mm-bot
+git clone https://github.com/omgmad/hotstuffmm.git
+cd hotstuffmm
 ```
 
 ### 2. Create a virtual environment
 
 ```bash
-# Ubuntu / Mac
+# Ubuntu / macOS
 python3 -m venv venv
 source venv/bin/activate
 
@@ -67,163 +189,192 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 4. Generate an agent wallet
+### 4. Create an API wallet on Hotstuff
 
-```bash
-python generate_wallet.py
-```
+1. Go to [Hotstuff](https://app.hotstuff.trade/join/hot) and connect your main wallet
+2. Navigate to **Settings → API Wallets → Create API Wallet**
+3. Save the **Private Key** securely
+4. Note your **main wallet address** (the one you logged in with)
 
-Save the printed **Address** and **PrivateKey** somewhere safe.
+> The API wallet signs orders on behalf of your main account. Your main wallet's private key never touches the bot. The API wallet cannot withdraw funds.
 
-### 5. Register the agent on Hotstuff
-
-1. Go to [hotstuff.trade](https://app.hotstuff.trade/join/hot) and connect your main wallet
-2. Navigate to **Settings → Agents → Add Agent**
-3. Enter the **Address** from step 4 as the agent address
-4. Confirm with MetaMask
-
-> The agent wallet signs orders on behalf of your main account. Your main wallet's private key never touches the bot.
-
-### 6. Create your .env file
+### 5. Configure environment variables
 
 ```bash
 cp .env.example .env
+nano .env
 ```
 
-Edit `.env` and fill in your agent wallet details:
+Fill in your values:
 
 ```env
-PRIVATE_KEY=0x_your_agent_private_key
-WALLET_ADDRESS=0x_your_agent_address
+PRIVATE_KEY=0xYOUR_API_WALLET_PRIVATE_KEY
+WALLET_ADDRESS=0xYOUR_MAIN_WALLET_ADDRESS
 ```
 
-### 7. Verify instruments
+> ⚠️ **Important**: `WALLET_ADDRESS` must be your **main wallet** (the one you use to login to Hotstuff), NOT the API wallet address. Positions and fills are tracked under the main wallet.
 
-```bash
-python check_instruments.py
-```
+### 6. Set leverage on Hotstuff UI
 
-### 8. Run the bot
+Before running the bot:
+1. Go to [Hotstuff Trade](https://app.hotstuff.trade/join/hot)
+2. Open BTC-PERP → click the leverage button → set to **11x** or **20x**
+3. Repeat for ETH-PERP
+
+### 7. Run the bot
 
 ```bash
 python hotstuff_mm_bot.py
 ```
 
-Type `yes` when prompted to confirm.
-
 ---
 
 ## ⚙️ Configuration
 
-Edit the `CONFIG` dictionary in `hotstuff_mm_bot.py`:
+Edit the `CONFIG` section at the top of `hotstuff_mm_bot.py`:
 
 ```python
 CONFIG = {
-    # ── Trading parameters ──
-    "spread_bps":        7,      # Spread in bps (7 = 0.07%)
-    "order_levels":      1,      # Orders per side (1 = 1 bid + 1 ask)
-    "level_spacing_bps": 5,      # Spacing between levels in bps
-    "order_size_usd":    10,     # Order size in USD (minimum $10)
+    # Trading parameters
+    "order_size_usd":            100,   # USD size per order — start small
+    "spread_bps":                5.0,   # Bid-ask spread in basis points
+    "refresh_interval":          5,     # Seconds between order cycles
 
-    # ── Risk management ──
-    "max_position_usd":      50,    # Max position per symbol in USD
-    "daily_loss_limit_usd":  20.0,  # Daily loss limit in USD
-    "max_drawdown_pct":       5.0,  # Max drawdown %
-
-    # ── Speed ──
-    "refresh_interval": 15,     # Seconds between cycles
+    # Risk management
+    "max_position_usd":          200,   # Max position per symbol (USD)
+    "max_total_exposure_usd":    400,   # Max combined BTC+ETH exposure (USD)
+    "daily_loss_limit_usd":      20.0,  # Bot pauses if daily loss exceeds this
+    "unrealized_loss_limit_usd": 5.0,   # Emergency close threshold
+    "consecutive_loss_limit":    10,    # Pause after N consecutive losses
 }
 ```
 
-### Recommended settings by experience level
+### Recommended settings by stage
 
-| Level | order_levels | order_size_usd | max_position_usd |
-|-------|-------------|----------------|-----------------|
-| Beginner | 1 | 10 | 30 |
-| Intermediate | 1–2 | 15 | 100 |
-| Advanced | 2–3 | 20+ | 200+ |
-
-### How it works
-
-Each cycle the bot:
-1. Cancels all existing orders
-2. Fetches the current mid price from Hotstuff
-3. Calculates bid/ask prices based on spread and inventory skew
-4. Places new bid and ask orders
-5. Waits for `refresh_interval` seconds
-
-**Inventory skew** adjusts quotes when the bot has a large position — if long, it lowers the ask to encourage selling and reduce exposure.
+| Stage | order_size | max_position | max_total | Leverage |
+|-------|-----------|--------------|-----------|----------|
+| Testing | $100 | $200 | $400 | 11x |
+| Stage 1 | $200 | $400 | $800 | 11x–20x |
+| Stage 2 | $500 | $800 | $1,600 | 20x |
 
 ---
 
-## 🛠️ Utilities
+## ▶️ Running the Bot
 
-| File | Purpose |
-|------|---------|
-| `generate_wallet.py` | Generate a new agent wallet |
-| `check_instruments.py` | View instrument IDs, tick sizes, lot sizes |
-| `cancel_all.py` | 🚨 Emergency cancel all open orders |
+```bash
+# Activate virtual environment
+source venv/bin/activate
+
+# Run with log output saved to file
+python hotstuff_mm_bot.py 2>&1 | tee bot_log.txt
+```
+
+### Sample log output
+
+```
+2026-03-06 10:01:15 | INFO | ── BTC-PERP | Mid: $70,800 | Pos: $+0 | Spread: 5.0bps
+2026-03-06 10:01:15 | INFO |    ✅ BID: 0.00141 @ 70,782
+2026-03-06 10:01:15 | INFO |    ✅ ASK: 0.00141 @ 70,818
+2026-03-06 10:01:20 | INFO |    BTC-PERP net_pos: $+200
+2026-03-06 10:01:20 | INFO |    BID тавихгүй (pos: $200 / max: ±$200)
+2026-03-06 10:01:25 | INFO |    📉 REDUCE MARKET SELL: 0.00070 (excess: $50)
+2026-03-06 10:01:26 | INFO |    BTC-PERP net_pos: $+150
+```
+
+---
+
+## 📈 Scaling Up
+
+Only scale after confirming all of the following for 24+ hours:
+
+- ✅ Position stays within limits consistently
+- ✅ No unexpected duplicate orders
+- ✅ Reduce logic fires correctly when position exceeds limit
+- ✅ Daily rebate is being credited in Hotstuff UI
+- ✅ No unexpected warnings or errors in logs
+
+```bash
+# Check for issues before scaling
+grep "WARNING\|ERROR\|HALTED" bot_log.txt
+
+# Verify position behavior
+grep "net_pos\|REDUCE" bot_log.txt | tail -20
+```
+
+---
+
+## 📊 Monitoring
+
+```bash
+# Follow live logs
+tail -f bot_log.txt
+
+# Check current position values
+grep "net_pos" bot_log.txt | tail -10
+
+# Check reduce activity
+grep "REDUCE" bot_log.txt | tail -10
+
+# Check for errors or warnings
+grep "ERROR\|WARNING\|HALTED\|алдаа" bot_log.txt | tail -20
+
+# Check volume (count fills)
+grep "Fill:" bot_log.txt | wc -l
+```
 
 ---
 
 ## ❌ Troubleshooting
 
-### `invalid order signer`
-- **Cause**: Signing mismatch or agent not registered
-- **Fix**:
-  1. Verify `PRIVATE_KEY` matches `WALLET_ADDRESS` in your `.env`
-  2. Confirm the agent is registered on hotstuff.trade under Settings → Agents
-  3. Ensure `eth-account==0.6.1` is installed: `pip show eth-account`
+### `ModuleNotFoundError: No module named 'websocket'`
+```bash
+pip install websocket-client
+# If still fails, install directly to venv:
+pip install websocket-client --target venv/lib/python3.12/site-packages/
+```
 
-### `400 Bad Request`
-- **Cause**: Invalid request format or order too small
-- **Fix**: Ensure `order_size_usd >= 10` (minimum notional is $10)
+### `positions: []` — API returns empty positions
+Make sure `WALLET_ADDRESS` in `.env` is your **main wallet**, not the API wallet. Test:
+```bash
+python3 -c "
+import requests
+r = requests.post('https://api.hotstuff.trade/info',
+    json={'method': 'positions', 'params': {'user': 'YOUR_MAIN_WALLET_HERE'}})
+print(r.text[:300])
+"
+```
 
-### `ModuleNotFoundError`
-- **Cause**: Dependencies not installed
-- **Fix**: `pip install -r requirements.txt`
+### Position keeps growing past the limit
+- Verify `WALLET_ADDRESS` is correct main wallet
+- Check reduce is triggering: `grep "REDUCE" bot_log.txt`
+- Check for errors: `grep "place_market" bot_log.txt`
 
-### `PRIVATE_KEY not set`
-- **Cause**: `.env` file missing or empty
-- **Fix**: `cp .env.example .env` then fill in your values
+### Duplicate orders appearing (more than 1 BID or ASK)
+- Cancel all open orders on Hotstuff UI → restart bot
+- Check: `grep "аль хэдийн\|open_orders" bot_log.txt`
 
-### Bot halted — `Daily loss limit reached`
-- **Cause**: Bot hit the `daily_loss_limit_usd` threshold
-- **Fix**: Restart the next day, or increase the limit in CONFIG if intentional
+### `400 Bad Request` on orders
+- Order size may be too small (minimum ~$10 notional)
+- Verify your API wallet is registered on Hotstuff
 
-### High IM Utilization (>70%)
-- **Cause**: Position too large relative to margin
-- **Fix**:
-  1. Set `order_levels` to `1`
-  2. Reduce `max_position_usd`
-  3. Add more USDC collateral on hotstuff.trade
+### `daily_loss_limit_usd` triggered — bot paused
+- Bot paused automatically to protect capital
+- Review logs to understand the cause
+- Restart when ready: `python hotstuff_mm_bot.py 2>&1 | tee bot_log.txt`
 
 ---
 
 ## 🚨 Emergency Stop
 
-To stop the bot and cancel all orders immediately:
-
 ```bash
-# Step 1 — stop the bot
+# Step 1 — immediately stop the bot
 Ctrl+C
 
 # Step 2 — cancel all open orders
-python cancel_all.py
-```
+# Go to Hotstuff UI → Open Orders tab → Close All
 
----
-
-## 📊 Monitoring Logs
-
-The bot writes to `mm_mainnet.log` while running:
-
-```bash
-# Follow live
-tail -f mm_mainnet.log
-
-# Search for errors
-grep "ERROR\|WARNING\|HALTED" mm_mainnet.log
+# Step 3 — close positions if needed
+# Go to Hotstuff UI → Positions tab → Close All
 ```
 
 ---
@@ -231,33 +382,49 @@ grep "ERROR\|WARNING\|HALTED" mm_mainnet.log
 ## 🔒 Security
 
 - **Never** commit your `.env` file to GitHub — it is listed in `.gitignore`
-- Use an **agent wallet** so your main wallet's private key never touches the bot
-- Start with small sizes and increase only after confirming the bot works correctly
+- Use an **API wallet** — your main wallet private key never touches the bot
+- The API wallet **cannot withdraw funds** — it can only place/cancel orders
+- Store your private key securely, preferably in a password manager
+- Regularly verify your positions on Hotstuff UI match what the bot reports
+
+---
+
+## 📁 File Structure
+
+```
+hotstuffmm/
+├── hotstuff_mm_bot.py    ← Main bot (v4.0)
+├── .env.example          ← Environment variables template
+├── requirements.txt      ← Python dependencies
+├── README.md             ← This file
+└── .gitignore            ← Prevents .env from being committed
+```
 
 ---
 
 ## 📚 Resources
 
-- [Hotstuff Docs](https://docs.hotstuff.trade)
+- [Hotstuff Exchange](https://app.hotstuff.trade/join/hot)
+- [Hotstuff Documentation](https://docs.hotstuff.trade)
+- [Hotstuff Fee Structure](https://docs.hotstuff.trade/hotstuff-docs/trading/fees.md)
 - [Hotstuff Discord](https://discord.gg/tradehotstuff)
-- [Hotstuff Trade](https://hotstuff.trade)
-
----
-
-## 👤 
-
-Built by [@0mgm4d](https://x.com/0mgm4d) — follow on X for updates and new releases.
 
 ---
 
 ## 🎁 Support & Referral
 
-If this bot has been helpful, consider signing up to Hotstuff using the referral link below — it helps support continued development:
+If this bot has been helpful, consider signing up to Hotstuff using my referral link — it supports continued development:
 
 👉 **[Join Hotstuff](https://app.hotstuff.trade/join/hot)**
 
 ---
 
+## 👤 Author
+
+Built by [@0mgm4d](https://x.com/0mgm4d) — follow on X for updates and new releases.
+
+---
+
 ## 📄 License
 
-MIT License — free to use and modify.
+MIT License — free to use, modify, and distribute.
