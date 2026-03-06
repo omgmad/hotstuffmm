@@ -241,8 +241,7 @@ Panels: KPI strip · 24h volume chart · live positions · rebate tier · streak
 python monitor.py terminal 0xYourWallet
 
 # Browser dashboard
-python monitor.py browser
-
+python monitor.py browser 0xYourWallet
 # Using .env
 source .env && python monitor.py terminal $WALLET_ADDRESS
 ```
