@@ -419,7 +419,7 @@ If this bot has been helpful, consider signing up to Hotstuff using my referral 
 
 ---
 
-## 👤 Author
+## 👤 
 
 Built by [@0mgm4d](https://x.com/0mgm4d) — follow on X for updates and new releases.
 
