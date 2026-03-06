@@ -7,6 +7,24 @@ An automated market making bot for [Hotstuff.trade](https://app.hotstuff.trade/j
 
 Built by [@0mgm4d](https://x.com/0mgm4d)
 
+![Bot Demo](docs/bot_demo.gif)
+
+---
+
+## 📊 Visual Explainers
+
+### How Spread Mechanism Works
+![Spread Mechanism](docs/gif1_spread.gif)
+
+### Maker Rebate Tiers
+![Rebate Tiers](docs/gif2_rebate.gif)
+
+### Position Balance & Volume Impact
+![Position Balance](docs/gif3_position.gif)
+
+### Leverage Risk Comparison
+![Leverage Risk](docs/gif4_leverage.gif)
+
 ---
 
 ## 📋 Table of Contents
@@ -419,7 +437,7 @@ If this bot has been helpful, consider signing up to Hotstuff using my referral 
 
 ---
 
-## 👤 
+## 👤 Author
 
 Built by [@0mgm4d](https://x.com/0mgm4d) — follow on X for updates and new releases.
 
