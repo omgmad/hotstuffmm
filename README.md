@@ -50,13 +50,13 @@ New to Hotstuff? Sign up using the referral link below:
 <td width="50%" align="center">
 
 **Spread Mechanism**<br>
-<img src="docs/gif1_spread.gif" width="100%">
+<img src="gif1_spread.gif" width="100%">
 
 </td>
 <td width="50%" align="center">
 
 **Maker Rebate Tiers**<br>
-<img src="docs/gif2_rebate.gif" width="100%">
+<img src="gif2_rebate.gif" width="100%">
 
 </td>
 </tr>
@@ -64,13 +64,13 @@ New to Hotstuff? Sign up using the referral link below:
 <td width="50%" align="center">
 
 **Position Balance & Auto-Reduce**<br>
-<img src="docs/gif3_position.gif" width="100%">
+<img src="gif3_position.gif" width="100%">
 
 </td>
 <td width="50%" align="center">
 
 **Leverage & Risk**<br>
-<img src="docs/gif4_leverage.gif" width="100%">
+<img src="gif4_leverage.gif" width="100%">
 
 </td>
 </tr>
