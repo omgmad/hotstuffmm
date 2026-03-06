@@ -1,19 +1,31 @@
 # Hotstuff MM — Market Maker Bot
 
-A market making bot for [Hotstuff Exchange](https://hotstuff.trade) (01.xyz).  
-Earns **maker rebates** by continuously quoting tight bid/ask spreads on BTC-PERP and ETH-PERP perpetuals.
+An automated market making bot for [Hotstuff.trade](https://app.hotstuff.trade/join/hot) perpetual futures.  
+Earns **maker rebates** by continuously quoting tight bid/ask spreads on BTC-PERP and ETH-PERP.
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776ab?logo=python&logoColor=white)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e)](LICENSE)
-[![Exchange](https://img.shields.io/badge/Exchange-Hotstuff-f97316)](https://hotstuff.trade)
+[![Exchange](https://img.shields.io/badge/Exchange-Hotstuff.trade-f97316)](https://app.hotstuff.trade/join/hot)
+[![X](https://img.shields.io/badge/X-@0mgm4d-000000?logo=x)](https://x.com/0mgm4d)
+
+> Built by [@0mgm4d](https://x.com/0mgm4d) — follow on X for updates.
 
 ---
 
 ## ⚠️ Disclaimer
 
 **Use at your own risk.** This software trades with real funds on mainnet.  
-The authors are not responsible for any financial losses.  
-Start with minimum capital, read the code, and understand what it does before increasing sizes.
+The author is not responsible for any financial losses.  
+Start with minimum capital, read the code, and understand what it does before increasing sizes.  
+For educational purposes only. NFA, DYOR.
+
+---
+
+## 🎁 Get Started on Hotstuff
+
+New to Hotstuff? Sign up using the referral link below:
+
+👉 **[Join Hotstuff.trade](https://app.hotstuff.trade/join/hot)**
 
 ---
 
@@ -72,7 +84,7 @@ Start with minimum capital, read the code, and understand what it does before in
 
 Every cycle (default 5 s), the bot:
 
-1. Fetches the current mid price
+1. Fetches the current mid price from Hotstuff
 2. Calculates a volatility-adjusted spread
 3. Cancels all existing quotes
 4. Places **1 BID** below mid and **1 ASK** above mid per symbol
@@ -122,12 +134,12 @@ pos >> max  →  auto-reduce: place a closing order
 ### Requirements
 
 - Python **3.10** or newer
-- A [Hotstuff Exchange](https://hotstuff.trade) account with an **Agent Key**
+- A [Hotstuff.trade](https://app.hotstuff.trade/join/hot) account with an **Agent Key**
 
 ### 1 — Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/hotstuffmm.git
+git clone https://github.com/omgmad/hotstuffmm.git
 cd hotstuffmm
 ```
 
@@ -162,9 +174,9 @@ PRIVATE_KEY=your_private_key_here
 WALLET_ADDRESS=0xYourAgentWalletAddress
 ```
 
-> **Where to get an Agent Key**
-> Log in to [hotstuff.trade](https://hotstuff.trade) → Settings → API Keys → Create Agent Key.
-> An Agent Key is a sub-key with limited permissions — use it instead of your main wallet key.
+> **Where to get an Agent Key**  
+> Log in to [hotstuff.trade](https://app.hotstuff.trade/join/hot) → Settings → Agents → Add Agent.  
+> An Agent Key signs orders on behalf of your main wallet. Your main wallet's private key never touches the bot.
 
 ### 5 — Run
 
@@ -298,20 +310,12 @@ hotstuffmm/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── LICENSE
-└── README.md
-```
-
----
-
-## Docker
-
-```bash
-cp .env.example .env
-# fill in .env
-
-docker compose up -d           # start in background
-docker compose logs -f         # follow logs
-docker compose down            # stop
+├── README.md
+└── docs/
+    ├── gif1_spread.gif
+    ├── gif2_rebate.gif
+    ├── gif3_position.gif
+    └── gif4_leverage.gif
 ```
 
 ---
@@ -333,7 +337,7 @@ docker compose down            # stop
 | `ValueError: Set PRIVATE_KEY in .env` | Run `cp .env.example .env` and edit it |
 | `ImportError: No module named 'eth_account'` | Run `pip install -r requirements.txt` |
 | Bot shows 0 fills | Check `WALLET_ADDRESS` is your **agent** wallet, not main |
-| Orders not filling | Spread may be too wide; check market depth on the exchange |
+| Orders not filling | Spread may be too wide; check market depth on Hotstuff |
 | `Circuit breaker` message | Normal — bot resumes automatically after 5 minutes |
 | WebSocket keeps reconnecting | Expected on poor connections — bot reconnects automatically |
 
@@ -351,6 +355,24 @@ With default config ($100 orders, 5 s cycles, BTC + ETH):
 | Rebate (VIP 1) | ~$1.25–9 / day |
 
 > Fill rate depends on spread tightness and market conditions.
+
+---
+
+## Support & Referral
+
+If this bot has been helpful, consider signing up to Hotstuff using the referral link — it helps support continued development:
+
+👉 **[Join Hotstuff.trade](https://app.hotstuff.trade/join/hot)**
+
+---
+
+## Links
+
+- 🌐 [Hotstuff.trade](https://app.hotstuff.trade/join/hot)
+- 📖 [Hotstuff Docs](https://docs.hotstuff.trade)
+- 💬 [Hotstuff Discord](https://discord.gg/tradehotstuff)
+- 🐦 [@0mgm4d on X](https://x.com/0mgm4d)
+- 💻 [GitHub](https://github.com/omgmad/hotstuffmm)
 
 ---
 
