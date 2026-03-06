@@ -11,19 +11,46 @@ Built by [@0mgm4d](https://x.com/0mgm4d)
 
 ---
 
-## 📊 Visual Explainers
+## 📊 How It Works — Visual Guide
 
-### How Spread Mechanism Works
+<table>
+<tr>
+<td width="50%">
+
+### 🎯 Spread Mechanism
+How the bot places BID + ASK orders around the mid price and earns a rebate on every fill.
+
 ![Spread Mechanism](docs/gif1_spread.gif)
 
-### Maker Rebate Tiers
+</td>
+<td width="50%">
+
+### 💰 Maker Rebate Tiers
+Volume drives tier upgrades — higher tier = higher rebate per fill = more daily earnings.
+
 ![Rebate Tiers](docs/gif2_rebate.gif)
 
-### Position Balance & Volume Impact
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### ⚖️ Position Balance
+Keeping position near $0 keeps both sides active — maximizing volume and rebate income.
+
 ![Position Balance](docs/gif3_position.gif)
 
-### Leverage Risk Comparison
+</td>
+<td width="50%">
+
+### ⚠️ Leverage Risk
+Same $400 position — dramatically different liquidation risk depending on leverage used.
+
 ![Leverage Risk](docs/gif4_leverage.gif)
+
+</td>
+</tr>
+</table>
 
 ---
 
