@@ -1,168 +1,208 @@
-<svg width="680" height="420" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 420">
-  <defs>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;display=swap');
-      .bg { fill: #0d0d0d; }
-      .term { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 12px; }
-      .dim { fill: #444; }
-      .green { fill: #00ff88; }
-      .red { fill: #ff4466; }
-      .yellow { fill: #ffcc00; }
-      .blue { fill: #4488ff; }
-      .white { fill: #e0e0e0; }
-      .cyan { fill: #00ccff; }
-      .orange { fill: #ff8844; }
-      .dot-red { fill: #ff5f57; }
-      .dot-yellow { fill: #febc2e; }
-      .dot-green { fill: #28c840; }
+<svg width="700" height="440" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>
+  .bg    { fill: #0e1117; }
+  .titlebar { fill: #1c1f26; }
+  .mono  { font-family: 'SF Mono','Fira Code','Cascadia Code','Courier New',monospace; font-size: 12.5px; }
+  .dim   { fill: #4a5568; }
+  .white { fill: #e2e8f0; }
+  .green { fill: #48bb78; }
+  .lgreen{ fill: #9ae6b4; }
+  .red   { fill: #fc8181; }
+  .yellow{ fill: #f6e05e; }
+  .blue  { fill: #63b3ed; }
+  .cyan  { fill: #76e4f7; }
+  .orange{ fill: #fbd38d; }
+  .gray  { fill: #718096; }
 
-      .line1 { animation: fadein 0.3s 0.2s both; }
-      .line2 { animation: fadein 0.3s 0.5s both; }
-      .line3 { animation: fadein 0.3s 0.8s both; }
-      .line4 { animation: fadein 0.3s 1.1s both; }
-      .line5 { animation: fadein 0.3s 1.4s both; }
-      .line6 { animation: fadein 0.3s 1.7s both; }
-      .line7 { animation: fadein 0.3s 2.0s both; }
-      .line8 { animation: fadein 0.3s 2.3s both; }
-      .line9 { animation: fadein 0.3s 2.6s both; }
-      .line10 { animation: fadein 0.3s 2.9s both; }
-      .line11 { animation: fadein 0.3s 3.2s both; }
-      .line12 { animation: fadein 0.3s 3.5s both; }
-      .line13 { animation: fadein 0.3s 3.8s both; }
-      .line14 { animation: fadein 0.3s 4.1s both; }
-      .line15 { animation: fadein 0.3s 4.4s both; }
-      .line16 { animation: fadein 0.3s 4.7s both; }
-      .line17 { animation: fadein 0.3s 5.0s both; }
-      .line18 { animation: fadein 0.3s 5.3s both; }
-      .line19 { animation: fadein 0.3s 5.6s both; }
-      .cursor { animation: blink 1s infinite; }
+  /* macOS dots */
+  .dot-r { fill: #ff5f57; }
+  .dot-y { fill: #febc2e; }
+  .dot-g { fill: #28c840; }
 
-      @keyframes fadein {
-        from { opacity: 0; transform: translateX(-4px); }
-        to { opacity: 1; transform: translateX(0); }
-      }
-      @keyframes blink {
-        0%, 49% { opacity: 1; }
-        50%, 100% { opacity: 0; }
-      }
+  /* line animations */
+  .l01 { animation: reveal .25s .1s  both; }
+  .l02 { animation: reveal .25s .4s  both; }
+  .l03 { animation: reveal .25s .7s  both; }
+  .l04 { animation: reveal .25s 1.0s both; }
+  .l05 { animation: reveal .25s 1.3s both; }
+  .l06 { animation: reveal .25s 1.6s both; }
+  .l07 { animation: reveal .25s 1.9s both; }
+  .l08 { animation: reveal .25s 2.2s both; }
+  .l09 { animation: reveal .25s 2.5s both; }
+  .l10 { animation: reveal .25s 2.8s both; }
+  .l11 { animation: reveal .25s 3.1s both; }
+  .l12 { animation: reveal .25s 3.4s both; }
+  .l13 { animation: reveal .25s 3.7s both; }
+  .l14 { animation: reveal .25s 4.0s both; }
+  .l15 { animation: reveal .25s 4.3s both; }
+  .l16 { animation: reveal .25s 4.6s both; }
+  .l17 { animation: reveal .25s 4.9s both; }
+  .l18 { animation: reveal .25s 5.2s both; }
 
-      .rebate-bar { animation: grow 1s 4.5s both; transform-origin: left; }
-      @keyframes grow {
-        from { transform: scaleX(0); }
-        to { transform: scaleX(1); }
-      }
-    </style>
-  </defs>
+  .cursor { animation: blink .9s infinite; fill: #48bb78; }
 
-  <!-- Background -->
-  <rect width="680" height="420" rx="12" class="bg"/>
-  <!-- Title bar -->
-  <rect width="680" height="36" rx="12" fill="#1a1a1a"/>
-  <rect y="24" width="680" height="12" fill="#1a1a1a"/>
-  <circle cx="20" cy="18" r="6" class="dot-red"/>
-  <circle cx="40" cy="18" r="6" class="dot-yellow"/>
-  <circle cx="60" cy="18" r="6" class="dot-green"/>
-  <text x="340" y="23" text-anchor="middle" class="term dim" font-size="11">hotstuff_mm_bot.py — mainnet</text>
+  .bar-fill { animation: grow 1.2s 5.0s cubic-bezier(.4,0,.2,1) both; transform-origin: left center; }
+  .bar-fill2 { animation: grow 1.2s 5.2s cubic-bezier(.4,0,.2,1) both; transform-origin: left center; }
 
-  <!-- Content -->
-  <g transform="translate(20, 56)">
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(3px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes blink {
+    0%,49%  { opacity: 1; }
+    50%,100%{ opacity: 0; }
+  }
+  @keyframes grow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+</style>
+</defs>
 
-    <!-- Banner -->
-    <g class="line1">
-      <text class="term red" font-weight="bold">╔══════════════════════════════════════════════════════╗</text>
-    </g>
-    <g class="line2" transform="translate(0,16)">
-      <text class="term red" font-weight="bold">║   🔴  HOTSTUFF MAINNET MM Bot v4.0                   ║</text>
-    </g>
-    <g class="line3" transform="translate(0,32)">
-      <text class="term red" font-weight="bold">╚══════════════════════════════════════════════════════╝</text>
-    </g>
+<!-- Window -->
+<rect width="700" height="440" rx="10" class="bg"/>
 
-    <g class="line4" transform="translate(0,52)">
-      <text class="term white">Confirm to start [yes/no]: </text>
-      <text class="term green" x="330">yes</text>
-    </g>
+<!-- Title bar -->
+<rect width="700" height="38" rx="10" class="titlebar"/>
+<rect y="28" width="700" height="10" class="titlebar"/>
 
-    <g class="line5" transform="translate(0,70)">
-      <text class="term dim">════════════════════════════════════════════════════</text>
-    </g>
-    <g class="line6" transform="translate(0,86)">
-      <text class="term cyan">📡 Startup position sync...</text>
-    </g>
-    <g class="line7" transform="translate(0,102)">
-      <text class="term green">✅ Position sync done (0 symbols)</text>
-    </g>
-    <g class="line8" transform="translate(0,118)">
-      <text class="term green">🚀 Market making started (v4.0)...</text>
-    </g>
+<!-- Window dots -->
+<circle cx="18" cy="19" r="6" class="dot-r"/>
+<circle cx="38" cy="19" r="6" class="dot-y"/>
+<circle cx="58" cy="19" r="6" class="dot-g"/>
 
-    <!-- Cycle -->
-    <g class="line9" transform="translate(0,138)">
-      <text class="term dim">═══════════════════════════════════════════════════════</text>
-    </g>
-    <g class="line10" transform="translate(0,154)">
-      <text class="term white">Cycle #1 | Daily loss: </text>
-      <text class="term green" x="168">$0.00</text>
-      <text class="term white" x="210"> | PnL: </text>
-      <text class="term green" x="252">+$0.00</text>
-      <text class="term white" x="306"> | Vol: </text>
-      <text class="term yellow" x="342">$0</text>
-    </g>
-    <g class="line11" transform="translate(0,170)">
-      <text class="term blue">── BTC-PERP | Mid: $67,842 | Pos: $0 | Spread: 3.0bps | Skew: +0.00bps</text>
-    </g>
-    <g class="line12" transform="translate(0,186)">
-      <text class="term blue">── ETH-PERP | Mid: $1,977  | Pos: $0 | Spread: 3.0bps | Skew: +0.00bps</text>
-    </g>
+<!-- Title -->
+<text x="350" y="24" text-anchor="middle" class="mono gray" font-size="12">hotstuff_mm_bot.py — mainnet</text>
 
-    <!-- Fill event -->
-    <g class="line13" transform="translate(0,206)">
-      <text class="term dim">───────────────────────────────────────────</text>
-    </g>
-    <g class="line14" transform="translate(0,222)">
-      <text class="term green" font-weight="bold">✅ FILL  BTC-PERP  openShort  $199.84  maker rebate: +$0.0050</text>
-    </g>
-    <g class="line15" transform="translate(0,238)">
-      <text class="term green" font-weight="bold">✅ FILL  ETH-PERP  openLong   $199.91  maker rebate: +$0.0050</text>
-    </g>
+<!-- ═══ CONTENT ═══ -->
+<g transform="translate(22, 56)">
 
-    <!-- Stats -->
-    <g class="line16" transform="translate(0,258)">
-      <text class="term dim">═══════════════════════════════════════════════════════</text>
-    </g>
-    <g class="line17" transform="translate(0,274)">
-      <text class="term white">Cycle #8 | Daily loss: </text>
-      <text class="term green" x="168">$0.00</text>
-      <text class="term white" x="210"> | PnL: </text>
-      <text class="term green" x="252">+$0.04</text>
-      <text class="term white" x="306"> | Vol: </text>
-      <text class="term yellow" x="342">$3,198</text>
-    </g>
-    <g class="line18" transform="translate(0,290)">
-      <text class="term cyan">   BTC-PERP net_pos: </text>
-      <text class="term red" x="158">-$200</text>
-      <text class="term white" x="196">  (SHORT)</text>
-    </g>
-    <g class="line19" transform="translate(0,306)">
-      <text class="term cyan">   ETH-PERP net_pos: </text>
-      <text class="term green" x="158">+$200</text>
-      <text class="term white" x="196">  (LONG)</text>
-    </g>
+<!-- Banner -->
+<g class="l01">
+  <text class="mono" y="0"><tspan fill="#fc8181" font-weight="bold">╔══════════════════════════════════════════════════════╗</tspan></text>
+</g>
+<g class="l02">
+  <text class="mono" y="18"><tspan fill="#fc8181" font-weight="bold">║  </tspan><tspan fill="#fc8181">🔴</tspan><tspan fill="#fc8181" font-weight="bold">  HOTSTUFF MAINNET MM Bot v4.0                   ║</tspan></text>
+</g>
+<g class="l03">
+  <text class="mono" y="36"><tspan fill="#fc8181" font-weight="bold">╚══════════════════════════════════════════════════════╝</tspan></text>
+</g>
 
-    <!-- Cursor -->
-    <g transform="translate(0,326)">
-      <text class="term green">$ </text>
-      <rect x="14" y="-12" width="8" height="14" fill="#00ff88" class="cursor"/>
-    </g>
+<!-- Config summary -->
+<g class="l04">
+  <text class="mono" y="58"><tspan class="gray">    Symbols : </tspan><tspan class="cyan">BTC-PERP  ETH-PERP</tspan></text>
+</g>
+<g class="l05">
+  <text class="mono" y="76"><tspan class="gray">    Spread  : </tspan><tspan class="yellow">3</tspan><tspan class="gray">–</tspan><tspan class="yellow">5 bps</tspan><tspan class="gray">  │  MaxPos: </tspan><tspan class="yellow">$2,400</tspan><tspan class="gray">  │  Skew: </tspan><tspan class="yellow">1.5</tspan></text>
+</g>
+<g class="l06">
+  <text class="mono" y="94"><tspan class="gray">    Daily limit: </tspan><tspan class="red">$30</tspan><tspan class="gray">  │  Unrealized: </tspan><tspan class="red">$50</tspan><tspan class="gray">  │  Circuit: </tspan><tspan class="orange">3x</tspan></text>
+</g>
 
-    <!-- Rebate bar bottom -->
-    <g transform="translate(0,352)">
-      <text class="term dim" font-size="11">Maker rebate  </text>
-      <rect x="100" y="-10" width="200" height="12" rx="2" fill="#1a1a1a"/>
-      <rect x="100" y="-10" width="200" height="12" rx="2" fill="#00ff4422"/>
-      <rect x="100" y="-10" width="80" height="12" rx="2" fill="#00ff88" class="rebate-bar"/>
-      <text class="term green" font-size="11" x="308">+$11.05/day</text>
-    </g>
+<!-- Divider -->
+<g class="l07">
+  <text class="mono dim" y="114">────────────────────────────────────────────────────────</text>
+</g>
 
-  </g>
+<!-- Startup -->
+<g class="l08">
+  <text class="mono" y="132"><tspan class="cyan">📡</tspan><tspan class="white"> Startup position sync... </tspan><tspan class="green">✅ done (0 positions)</tspan></text>
+</g>
+<g class="l09">
+  <text class="mono" y="150"><tspan class="green">🚀</tspan><tspan class="white"> Market making started</tspan></text>
+</g>
+
+<!-- Divider -->
+<g class="l10">
+  <text class="mono dim" y="170">────────────────────────────────────────────────────────</text>
+</g>
+
+<!-- Cycle -->
+<g class="l11">
+  <text class="mono" y="188">
+    <tspan class="gray">Cycle </tspan><tspan class="white">#12</tspan>
+    <tspan class="gray">  loss: </tspan><tspan class="green">$0.00</tspan>
+    <tspan class="gray">  PnL: </tspan><tspan class="green">+$0.06</tspan>
+    <tspan class="gray">  vol: </tspan><tspan class="yellow">$4,812</tspan>
+  </text>
+</g>
+<g class="l12">
+  <text class="mono" y="206">
+    <tspan class="blue">── BTC-PERP</tspan>
+    <tspan class="gray"> mid:</tspan><tspan class="white">$67,842</tspan>
+    <tspan class="gray"> pos:</tspan><tspan class="red">-$200</tspan>
+    <tspan class="gray"> spread:</tspan><tspan class="yellow">3.0bps</tspan>
+    <tspan class="gray"> skew:</tspan><tspan class="lgreen">+2.25bps</tspan>
+  </text>
+</g>
+<g class="l13">
+  <text class="mono" y="224">
+    <tspan class="blue">── ETH-PERP</tspan>
+    <tspan class="gray"> mid: </tspan><tspan class="white">$1,977</tspan>
+    <tspan class="gray"> pos:  </tspan><tspan class="green">+$200</tspan>
+    <tspan class="gray"> spread:</tspan><tspan class="yellow">3.0bps</tspan>
+    <tspan class="gray"> skew:</tspan><tspan class="red">-2.25bps</tspan>
+  </text>
+</g>
+
+<!-- Fill events -->
+<g class="l14">
+  <text class="mono" y="244">
+    <tspan class="green" font-weight="bold">✅ FILL</tspan>
+    <tspan class="cyan">  BTC-PERP</tspan>
+    <tspan class="white">  closeShort  $199.89</tspan>
+    <tspan class="green">  rebate: +$0.0050</tspan>
+  </text>
+</g>
+<g class="l15">
+  <text class="mono" y="262">
+    <tspan class="green" font-weight="bold">✅ FILL</tspan>
+    <tspan class="cyan">  ETH-PERP</tspan>
+    <tspan class="white">  openLong    $199.94</tspan>
+    <tspan class="green">  rebate: +$0.0050</tspan>
+  </text>
+</g>
+
+<!-- Divider -->
+<g class="l16">
+  <text class="mono dim" y="282">────────────────────────────────────────────────────────</text>
+</g>
+
+<!-- Stats -->
+<g class="l17">
+  <text class="mono" y="300">
+    <tspan class="gray">Cycle </tspan><tspan class="white">#24</tspan>
+    <tspan class="gray">  loss: </tspan><tspan class="green">$0.00</tspan>
+    <tspan class="gray">  PnL: </tspan><tspan class="green">+$0.14</tspan>
+    <tspan class="gray">  vol: </tspan><tspan class="yellow">$9,201</tspan>
+    <tspan class="gray">  fills: </tspan><tspan class="white">18</tspan>
+  </text>
+</g>
+
+<!-- Prompt + cursor -->
+<g class="l18">
+  <text class="mono green" y="320">$</text>
+  <rect x="14" y="307" width="7" height="15" rx="1" class="cursor"/>
+</g>
+
+<!-- ═══ BOTTOM STATS ═══ -->
+<!-- BG pill -->
+<rect x="0" y="330" width="656" height="56" rx="6" fill="#161b22"/>
+
+<!-- Rebate bar -->
+<text class="mono gray" font-size="11" y="348" x="8">Maker rebate</text>
+<rect x="100" y="337" width="340" height="10" rx="5" fill="#1a2332"/>
+<rect x="100" y="337" width="340" height="10" rx="5" fill="#48bb7822"/>
+<rect x="100" y="337" width="170" height="10" rx="5" fill="#48bb78" class="bar-fill"/>
+<text class="mono green" font-size="11.5" font-weight="bold" y="348" x="450">+$11.05 / day</text>
+
+<!-- Vol bar -->
+<text class="mono gray" font-size="11" y="368" x="8">Vol / day</text>
+<rect x="100" y="357" width="340" height="10" rx="5" fill="#1a2332"/>
+<rect x="100" y="357" width="340" height="10" rx="5" fill="#63b3ed22"/>
+<rect x="100" y="357" width="93" height="10" rx="5" fill="#63b3ed" class="bar-fill2"/>
+<text class="mono blue" font-size="11.5" font-weight="bold" y="368" x="450">$541,000</text>
+
+</g>
 </svg>
