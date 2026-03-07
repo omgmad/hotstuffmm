@@ -193,7 +193,7 @@ Type `yes` at the confirmation prompt. The bot begins quoting immediately.
 Open a second terminal while the bot runs:
 
 ```bash
-python monitor.py
+python3 monitor.py
 ```
 
 Select a mode:
